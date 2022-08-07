@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div><i class="iconfont icon-dianzan"></i></div>
     <router-view></router-view>
   </div>
 </template>

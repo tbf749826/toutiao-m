@@ -74,5 +74,11 @@
   content: '\e60e';
 }
 body {
-  background-color: pink;
+  background-color: #f5f7f9;
+}
+.login-container .nav-bar {
+  background-color: #3296fa;
+}
+.login-container .nav-bar .van-nav-bar__title {
+  color: #fff;
 }

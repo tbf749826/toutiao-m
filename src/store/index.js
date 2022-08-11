@@ -1,17 +1,21 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import { getItem, setItem } from '@/utils/storage'
+
+const TOKEN = 'TOUTIAO_USER'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    user: JSON.parse(localStorage.getItem('TOUTIAO_USER'))
+    user: getItem(TOKEN),
+    info: 'hello,vuex'
   },
   getters: {},
   mutations: {
-    setUser(state, user) {
+    SETUSER(state, user) {
       state.user = user
-      localStorage.setItem('TOUTIAO_USER', JSON.stringify(user))
+      setItem(TOKEN, state.user)
     }
   },
   actions: {},

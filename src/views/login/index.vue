@@ -1,7 +1,14 @@
 <template>
   <div class="login-container">
     <!-- 导航栏 -->
-    <van-nav-bar title="登录" class="nav-bar" />
+    <van-nav-bar title="登录" class="nav-bar">
+      <van-icon
+        class="back-btn"
+        slot="left"
+        name="cross"
+        @click="$router.back()"
+      />
+    </van-nav-bar>
     <!-- /导航栏 -->
 
     <!-- 登录表单 -->
@@ -100,17 +107,17 @@ export default {
       })
 
       try {
-        const res = await login(user)
-        this.$store.commit('setUser', res.data.data)
-        this.$toast.success('登录成功', res)
+        const { data } = await login(user)
+        this.$store.commit('SETUSER', data.data)
+        this.$toast.success('登录成功')
         // console.log('登录成功', res)
       } catch (err) {
         console.log(err)
         if (err.response.status === 400) {
-          this.$toast.fail('手机号或验证码错误', err)
+          this.$toast.fail('手机号或验证码错误')
           // console.log('手机号或验证码错误', err)
         } else {
-          this.$toast.fail('登录失败，请重试', err)
+          this.$toast.fail('登录失败，请重试')
           // console.log('登录失败，请重试', err)
         }
       }
@@ -155,5 +162,8 @@ export default {
   color: #7b7b7b;
   background-color: #ededed;
   border: none;
+}
+.back-btn {
+  color: #fff;
 }
 </style>

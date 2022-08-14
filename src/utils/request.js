@@ -9,7 +9,6 @@ const request = axios.create({
 })
 
 // 添加请求拦截器
-
 request.interceptors.request.use(
   function (config) {
     const { user } = store.state
@@ -25,4 +24,5 @@ request.interceptors.request.use(
     return Promise.reject(error)
   }
 )
+
 export default request

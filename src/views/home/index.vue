@@ -22,23 +22,48 @@
         <!-- /子组件 -->
       </van-tab>
       <div slot="nav-right" class="placeholder"></div>
-      <div slot="nav-right" class="hamburger-btn">
+      <div
+        slot="nav-right"
+        class="hamburger-btn"
+        @click="isEditChannelShow = true"
+      >
         <i class="iconfont icon-gengduo"></i>
       </div>
     </van-tabs>
     <!-- /tab标签页 -->
+
+    <!-- 频道编辑 -->
+    <van-popup
+      class="edit-channel-popup"
+      v-model="isEditChannelShow"
+      position="bottom"
+      :style="{ height: '100%' }"
+      closeable
+      close-icon-position="top-left"
+    >
+      <ChannelEdit
+        :MyChannels="channels"
+        :active="active"
+        @addChannel="OnAddChannel"
+        @UpdateActive="OnUpdateActive"
+        @DeleteChannel="OnDeleteChannel"
+      ></ChannelEdit>
+    </van-popup>
+    <!-- /频道编辑 -->
   </div>
 </template>
 
 <script>
 import { GetUserChannels } from '@/api/user.js'
 import articleList from './components/articleList.vue'
+import ChannelEdit from './components/ChannelEdit.vue'
 export default {
   name: 'HomeIndex',
   data() {
     return {
       active: 0,
-      channels: []
+      channels: [],
+      isEditChannelShow: false // 弹出层的状态
     }
   },
   created() {
@@ -52,10 +77,28 @@ export default {
       } catch (err) {
         this.$toast('获取频道列表数据失败')
       }
+    },
+    OnAddChannel(channel) {
+      this.channels.push(channel)
+    },
+    OnUpdateActive(index, isEditChannelShow) {
+      this.active = index
+      // 关闭频道弹层
+      this.isEditChannelShow = isEditChannelShow
+    },
+    OnDeleteChannel(channelItem, index, fiexChannels) {
+      // if (index === 0) return
+      // console.log(channelItem.id)
+      if (fiexChannels.includes(channelItem.id)) return
+      if (index <= this.active) {
+        this.OnUpdateActive(this.active - 1, true)
+      }
+      this.channels.splice(index, 1)
     }
   },
   components: {
-    articleList
+    articleList,
+    ChannelEdit
   }
 }
 </script>
@@ -142,6 +185,12 @@ export default {
     top: 46px;
     z-index: 2;
     width: 100%;
+  }
+
+  // 频道编辑
+  .edit-channel-popup {
+    padding-top: 43px;
+    box-sizing: border-box;
   }
 }
 </style>

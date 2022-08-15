@@ -13,3 +13,15 @@ export const userArticle = (params) => {
     params
   })
 }
+
+/**
+ * 获取所有频道列表
+ * @param {object}
+ * @return {object} 返回值是一个promise对象
+ */
+export const getAllChannels = () => {
+  return request({
+    method: 'GET',
+    url: '/v1_0/channels'
+  })
+}

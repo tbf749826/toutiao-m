@@ -66,7 +66,7 @@ export default {
   }
   .cover-warp {
     display: flex;
-    padding: 15px 0;
+    padding: 18px 0 14px;
     .cover-item {
       flex: 1;
       height: 73px;

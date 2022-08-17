@@ -25,3 +25,15 @@ export const getAllChannels = () => {
     url: '/v1_0/channels'
   })
 }
+
+// 获取新闻详情
+/**
+ * @param {String,Number,Object} articleId是每个文章的id
+ * @returns  返回值是Promise对象
+ */
+export const getArticleById = (articleId) => {
+  return request({
+    method: 'GET',
+    url: `/v1_0/articles/${articleId}`
+  })
+}

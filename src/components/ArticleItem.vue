@@ -1,6 +1,11 @@
 <template>
   <!-- 文章列表页   -->
-  <van-cell class="article-item">
+  <!-- 跳转的方式：
+  1、:to="'/article/'+ article.ar_id"
+  2、:to="`/article/${article.art_id}`"
+  3、:to="{name:article,params{article.id:article.art_id}}"
+   -->
+  <van-cell class="article-item" :to="`/article/${article.art_id}`">
     <div slot="title" class="title van-multi-ellipsis--l2">
       {{ article.title }}
     </div>

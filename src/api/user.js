@@ -48,4 +48,22 @@ export const GetUserChannels = () => {
   })
 }
 
+// 设置用户的频道（部分覆盖）
+
+export const AddUserChannels = (channels) => {
+  return request({
+    method: 'PATCH',
+    url: '/v1_0/user/channels',
+    data: {
+      channels: [channels]
+    }
+  })
+}
+
 //
+export const DelUserChannels = (channels) => {
+  return request({
+    method: 'DELETE',
+    url: `/v1_0/user/channels/${channels}`
+  })
+}

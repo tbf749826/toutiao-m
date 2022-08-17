@@ -9,13 +9,14 @@
         size="small"
         round
         icon="search"
+        to="/search"
         >搜索</van-button
       >
     </van-nav-bar>
     <!-- /导航栏 -->
 
     <!-- tab标签页 -->
-    <van-tabs v-model="active" class="active-item">
+    <van-tabs v-model="active" class="active-item van-tabs__wrap--scrollable">
       <van-tab :title="item.name" v-for="item in channels" :key="item.id">
         <!-- 子组件 -->
         <articleList slot="default" :channel="item"></articleList>
@@ -54,9 +55,15 @@
 </template>
 
 <script>
-import { GetUserChannels } from '@/api/user.js'
+import {
+  GetUserChannels,
+  AddUserChannels,
+  DelUserChannels
+} from '@/api/user.js'
 import articleList from './components/articleList.vue'
 import ChannelEdit from './components/ChannelEdit.vue'
+import { mapState } from 'vuex'
+import { setItem, getItem } from '@/utils/storage'
 export default {
   name: 'HomeIndex',
   data() {
@@ -72,14 +79,36 @@ export default {
   methods: {
     async loadChannels() {
       try {
-        const { data } = await GetUserChannels()
-        this.channels = data.data.channels
+        let channles = []
+        const localChannels = getItem('TOUTIAO_CHANNELS')
+        if (this.user || !localChannels) {
+          // 登录 或者 本地没有存储 获取后端数据
+          const { data } = await GetUserChannels()
+          this.channels = data.data.channels
+          return false
+        } else {
+          // 未登录并且本地没有数据
+          channles = localChannels
+        }
+        this.channels = channles
       } catch (err) {
         this.$toast('获取频道列表数据失败')
       }
     },
-    OnAddChannel(channel) {
+    async OnAddChannel(channel) {
       this.channels.push(channel)
+      if (this.user) {
+        try {
+          await AddUserChannels({
+            id: channel.id,
+            seq: this.channels.length
+          })
+        } catch {
+          this.$toast('保存失败,请稍后重试')
+        }
+      } else {
+        setItem('TOUTIAO_CHANNELS', this.channels)
+      }
     },
     OnUpdateActive(index, isEditChannelShow) {
       this.active = index
@@ -87,18 +116,34 @@ export default {
       this.isEditChannelShow = isEditChannelShow
     },
     OnDeleteChannel(channelItem, index, fiexChannels) {
-      // if (index === 0) return
-      // console.log(channelItem.id)
       if (fiexChannels.includes(channelItem.id)) return
       if (index <= this.active) {
         this.OnUpdateActive(this.active - 1, true)
       }
       this.channels.splice(index, 1)
+
+      this.DelChannels(channelItem)
+    },
+    async DelChannels(channelItem) {
+      try {
+        if (this.user) {
+          // 已登录
+          await DelUserChannels(channelItem.id)
+        } else {
+          // 未登录
+          setItem('TOUTIAO_CHANNELS', this.channels)
+        }
+      } catch {
+        this.$toast('操作失败')
+      }
     }
   },
   components: {
     articleList,
     ChannelEdit
+  },
+  computed: {
+    ...mapState(['user'])
   }
 }
 </script>
@@ -180,7 +225,7 @@ export default {
       background-size: contain;
     }
   }
-  /deep/.active-item .van-tabs__wrap {
+  /deep/ .active-item .van-tabs__wrap {
     position: fixed;
     top: 46px;
     z-index: 2;

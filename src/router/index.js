@@ -12,7 +12,6 @@ const routes = [
   {
     path: '/login',
     name: 'login',
-
     component: loginIndex
   },
   // 首页
@@ -44,6 +43,19 @@ const routes = [
         component: () => import('@/views/my')
       }
     ]
+  },
+  {
+    path: '/search',
+    name: 'search',
+    component: () => import('@/views/search')
+  },
+  {
+    path: '/article/:articleId',
+    name: 'article',
+    component: () => import('@/views/article'),
+    // 可以再props中快速的获取到articleId
+    // 方法二通过this.$route.params.articleId获取id，但是不足的地方是，组件和路由直接的耦合度太高，如果复用必须传递一个articleId
+    props: true
   }
 ]
 

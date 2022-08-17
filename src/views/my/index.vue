@@ -7,7 +7,7 @@
         <!-- 左侧 -->
         <div class="left">
           <van-image class="avatar" fit="cover" :src="userInfo.photo" round />
-          <span class="text">嘿嘿</span>
+          <span class="text">{{ userInfo.name }}</span>
         </div>
         <!-- 右侧 -->
         <div class="right">

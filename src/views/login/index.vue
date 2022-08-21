@@ -111,7 +111,8 @@ export default {
         this.$store.commit('SETUSER', data.data)
         this.$toast.success('登录成功')
         // console.log('登录成功', res)
-        this.$router.back()
+        // this.$router.back()
+        this.$router.replace('/home')
       } catch (err) {
         console.log(err)
         if (err.response.status === 400) {
@@ -137,6 +138,7 @@ export default {
         this.$toast('发送成功')
       } catch (err) {
         this.isShow = false
+        console.log(err.response)
         if (err.response.status === 429) {
           this.$toast('发送太频繁，请稍后重试', err)
         } else {

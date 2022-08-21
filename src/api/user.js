@@ -67,3 +67,48 @@ export const DelUserChannels = (channels) => {
     url: `/v1_0/user/channels/${channels}`
   })
 }
+
+// 关注用户
+export const AddFollow = (userId) => {
+  return request({
+    method: 'POST',
+    url: '/v1_0/user/followings',
+    data: {
+      target: userId
+    }
+  })
+}
+
+// 取消关注用户
+export const DeleteFollow = (userId) => {
+  return request({
+    method: 'DELETE',
+    url: `/v1_0/user/followings/${userId}`
+  })
+}
+
+// 获取用户个人信息
+export const getUserProfile = () => {
+  return request({
+    method: 'GET',
+    url: '/v1_0/user/profile'
+  })
+}
+
+// 编辑用户个人资料
+export const updateUserName = (data) => {
+  return request({
+    method: 'PATCH',
+    url: '/v1_0/user/profile',
+    data
+  })
+}
+
+// 更新用户头像
+export const updateUserPhoto = (data) => {
+  return request({
+    method: 'PATCH',
+    url: '/v1_0/user/photo',
+    data
+  })
+}
